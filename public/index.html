@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitch OAuth</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="/index_script.js"></script>
+</head>
+
+<body>
+    <h1>Twitch OAuth TokenGenerator</h1>
+    <div class="buttonLinkContainer">
+        <div class="buttonLink"><a href="/TwitchBot">Twitch Bot Login</a></div>
+        <div class="buttonLink"><a href="/TwitchUser">Twitch User Login</a></div>
+    </div>
+    <div>
+        <div class="buttonLink"><a href="/TwitchValidate">Validate Twitch Token</a></div>
+    </div>
+    <div>
+        <div class="buttonLink"><a id="linkCustom" onclick href="/TwitchCustom">Get Token for Scopes</a></div>
+    </div>
+    <div>
+        <span id='selectedScopes'></span>
+    </div>
+</body>
+
+</html>
