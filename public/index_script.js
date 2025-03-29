@@ -186,6 +186,20 @@ function setSelectedScopesDisplay() {
 generateTable(gScopes);
 
 
+// Fetch scope availability and hide buttons if necessary
+fetch('/scope-availability')
+    .then(response => response.json())
+    .then(data => {
+        if (!data.botScopesAvailable) {
+            document.querySelector('.buttonLink a[href="/TwitchBot"]').style.display = 'none';
+        }
+        if (!data.userScopesAvailable) {
+            document.querySelector('.buttonLink a[href="/TwitchUser"]').style.display = 'none';
+        }
+    })
+    .catch(error => console.error('Error fetching scope availability:', error));
+
+
 /**********************************************************************
  * To Top function
  * https://www.w3schools.com/howto/howto_js_scroll_to_top.asp

@@ -44,7 +44,7 @@ This project is a web application designed to handle Twitch authentication. It a
 
     ```https://your_host_url:your_port```
 
-    The application will also tell you 
+    The application will also tell you the URL where it is running based on your configuration.
 
 6. **Enable HTTPS (Optional)**:
     For secure communication, configure HTTPS by providing valid SSL certificates in the `.env` file. 

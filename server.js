@@ -11,23 +11,22 @@ const PORT = process.env.PORT ?? 3000;
 
 // Twitch credentials
 const gClientId = process.env.TWITCH_CLIENT_ID;
+if (!gClientId) {
+    throw new Error('TWITCH_CLIENT_ID is not defined in the environment variables.');
+}
+
 const gClientSecret = process.env.TWITCH_CLIENT_SECRET;
+if (!gClientSecret) {
+    throw new Error('TWITCH_CLIENT_SECRET is not defined in the environment variables.');
+}
+
 var gHost = process.env.HOST ?? "localhost";
 
 //Preset scopes for the bot user access token
-const gScopesBot = ['chat:edit', 'chat:read', 'user:write:chat', 'moderator:manage:announcements',
-    'moderator:manage:automod', 'moderator:read:banned_users', 'moderator:read:chat_messages',
-    'moderator:manage:chat_messages', 'moderator:read:moderators', 'moderator:manage:shoutouts',
-    'moderator:read:suspicious_users', 'user:bot', 'moderator:read:followers', 'user:read:chat'
-].join(' ');
+const gScopesBot = process.env.TWITCH_SCOPES_BOT;
 
 //Preset scopes for the Channel user access token
-const gScopesUser = ['bits:read', 'channel:manage:ads', 'channel:read:ads', 'channel:manage:broadcast',
-    'channel:edit:commercial', 'channel:manage:moderators', 'channel:manage:raids',
-    'channel:read:subscriptions', 'channel:read:vips', 'channel:manage:vips',
-    'channel:moderate', 'clips:edit', 'moderation:read', 'moderator:read:shoutouts',
-    'moderator:read:followers', 'user:read:chat'
-].join(' ');
+const gScopesUser = process.env.TWITCH_SCOPES_USER;
 
 var gProtocol;
 
@@ -68,6 +67,8 @@ app.get('/TwitchBot', (req, res) => {
 });
 
 app.get('/TwitchUser', (req, res) => {
+
+
     const lAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${gClientId}&redirect_uri=${encodeURIComponent(gRedirectUri)}&response_type=code&scope=${encodeURIComponent(gScopesUser)}&force_verify=true`;
     res.redirect(lAuthUrl);
 });
@@ -81,6 +82,13 @@ app.get('/TwitchCustom', (req, res) => {
 
 app.get('/TwitchValidate', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/twitch-validate.html'));
+});
+
+app.get('/scope-availability', (req, res) => {
+    res.json({
+        botScopesAvailable: !!gScopesBot,
+        userScopesAvailable: !!gScopesUser
+    });
 });
 
 app.get('/Twitch/callback', async (req, res) => {
