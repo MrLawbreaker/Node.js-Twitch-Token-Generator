@@ -1,5 +1,5 @@
 {
-  "name": "neuer-ordner-(10)",
+  "name": "Nodejs Twitch Auth Token Generator",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -7,7 +7,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "WTFPL",
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.7",
