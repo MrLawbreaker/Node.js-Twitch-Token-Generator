@@ -4,6 +4,7 @@ const https = require('https');
 const http = require('http'); // For HTTP server
 const fs = require('fs');
 const path = require('path');
+const { randomUUID } = require('crypto');
 
 dotenv.config();
 const app = express();
@@ -56,26 +57,25 @@ try {
 
 }
 
-var gRedirectUri = `${gProtocol}://${gHost}:${PORT}/Twitch/callback`;
+const gRedirectUri = `${gProtocol}://${gHost}:${PORT}/Twitch/callback`;
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/TwitchBot', (req, res) => {
-    const lAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${gClientId}&redirect_uri=${encodeURIComponent(gRedirectUri)}&response_type=code&scope=${encodeURIComponent(gScopesBot)}&force_verify=true`;
+    const lAuthUrl = getAuthURL(gScopesBot);
     res.redirect(lAuthUrl);
 });
 
 app.get('/TwitchUser', (req, res) => {
 
-
-    const lAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${gClientId}&redirect_uri=${encodeURIComponent(gRedirectUri)}&response_type=code&scope=${encodeURIComponent(gScopesUser)}&force_verify=true`;
+    const lAuthUrl = getAuthURL(gScopesUser);
     res.redirect(lAuthUrl);
 });
 
 app.get('/TwitchCustom', (req, res) => {
     const lCustomScopes = req.query.scopes;
-    const lAuthURL = `https://id.twitch.tv/oauth2/authorize?client_id=${gClientId}&redirect_uri=${encodeURIComponent(gRedirectUri)}&response_type=code&scope=${encodeURIComponent(lCustomScopes)}&force_verify=true`
+    const lAuthURL = getAuthURL(lCustomScopes);
 
     res.redirect(lAuthURL);
 });
@@ -92,10 +92,27 @@ app.get('/scope-availability', (req, res) => {
 });
 
 app.get('/Twitch/callback', async (req, res) => {
+
+    /**
+     * Authorization checks
+     */
+
     const lAuthCode = req.query.code;
     if (!lAuthCode) {
-        return res.send('Authorization failed.');
+        return res.status(400).send('Authorization failed.');
     }
+
+    const lState = req.query.state;
+    if (!lState || !gStateSet.has(lState)) {
+        return res.sendStatus(401);
+    }
+
+    gStateSet.delete(lState);
+
+    /**
+     * Build the call to the twitch api to get the token
+     * using authorization code grant flow
+     */
 
     const tokenUrl = 'https://id.twitch.tv/oauth2/token';
     const params = new URLSearchParams({
@@ -125,7 +142,7 @@ app.get('/Twitch/callback', async (req, res) => {
             res.send('Success! You can close this window now!');
         }
         else {
-        res.json(data);
+            res.json(data);
         }
 
 
@@ -134,6 +151,34 @@ app.get('/Twitch/callback', async (req, res) => {
         res.status(500).send('Error exchanging token');
     }
 });
+
+
+const gStateSet = new Set();
+
+/**
+ * 
+ * @param {string} pScopesString Space delimited 
+ * @returns 
+ */
+function getAuthURL(pScopesString) {
+    const lNow = Date.now();
+    const lState = `${lNow}${randomUUID()}`;
+
+    gStateSet.add(lState);
+    setTimeout(() => {
+        gStateSet.delete(lState);
+    }, 10 * 1000); //Make state invalid in 10 seconds
+
+    const lAuthUrl = new URL('https://id.twitch.tv/oauth2/authorize');
+    lAuthUrl.searchParams.append('client_id', gClientId);
+    lAuthUrl.searchParams.append('state', lState);
+    lAuthUrl.searchParams.append('redirect_uri', gRedirectUri);
+    lAuthUrl.searchParams.append('response_type', 'code');
+    lAuthUrl.searchParams.append('scope', pScopesString);
+    lAuthUrl.searchParams.append('force_verify', 'true');
+
+    return lAuthUrl.toString();
+}
 
 function isValidHost(pHost) {
     try {

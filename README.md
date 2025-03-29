@@ -79,5 +79,25 @@ This project is a web application designed to easily get Twitch user access toke
 6. **Enable HTTPS (Optional)**:
     For secure communication, configure HTTPS by providing valid SSL certificates in the `.env` file. 
 
+## API Endpoints
+
+The application provides the following endpoints:
+
+- **`/TwitchBot`**  
+    Redirects the user to Twitch's authorization page for obtaining a bot access token using predefined bot scopes.
+
+- **`/TwitchUser`**  
+    Redirects the user to Twitch's authorization page for obtaining a user access token using predefined user scopes.
+
+- **`/TwitchCustom`**  
+    Redirects the user to Twitch's authorization page for obtaining an access token with custom scopes.  
+    - Query Parameter: `scopes` (space-delimited list of scopes).
+
+- **`/TwitchValidate`**  
+    Serves a validation page where users can input and validate their Twitch tokens.
+
+- **`/Twitch/callback`**  
+    Handles the callback from Twitch after user authorization. Exchanges the authorization code for an access token and returns the token details as JSON.
+
 ## License
 This project is licensed under the [MIT License](LICENSE).
