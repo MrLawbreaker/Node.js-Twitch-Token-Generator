@@ -90,7 +90,11 @@ function generateTable(pData) {
     let lThead = document.createElement("thead");
     let lHeaderRow = document.createElement("tr");
     let lHeaderToggle = document.createElement("td");
-    lHeaderToggle.innerHTML = "<strong>Use scope (<span class='interactableLink' id='clearScopeSpan' onclick='clearScopes()'>Clear</span>)</strong>";
+    lHeaderToggle.innerHTML = `
+    <strong>
+    Use scope (<span title='Remove all selected scopes' class='interactableLink' id='clearScopeSpan' onclick='clearScopes()'>Clear</span>)
+    </strong>
+    `;
     let lHeaderScope = document.createElement("td");
     lHeaderScope.innerHTML = "<strong>Scope</strong>";
     let lHeaderDesc = document.createElement("td");
@@ -112,6 +116,8 @@ function generateTable(pData) {
         lCellToggle.classList.add("toggleCell");
         let lInputToggle = document.createElement("input");
         {
+            lInputToggle.classList.add('scopeToggle');
+            lInputToggle.id = `toggle_${lScope}`
             lInputToggle.type = "checkbox";
             lInputToggle.dataset.scope = lScope;
             lInputToggle.onchange = onScopeToggle;
@@ -182,7 +188,20 @@ function setSelectedScopesDisplay() {
     lLinkElem.setAttribute('href', '/TwitchCustom?scopes=' + encodeURIComponent(lScopeArray.join(' ')));
 
     var lSelectedScopesElem = document.getElementById("selectedScopes");
-    lSelectedScopesElem.innerHTML = "[ " + lScopeArray.map(x => `<a href="#${x}">${x}</a>`).join(" | ") + " ]";
+    if (lScopeArray.length > 0) {
+        lSelectedScopesElem.innerHTML = "[ " + lScopeArray.map(x => `<a href="#${x}">${x}</a><sup class="removeScopeSup" onclick="toggleScope('${x}')" title="Remove ${x}"> X </sup>`).join(" | ") + " ]";
+    }
+    else {
+        lSelectedScopesElem.innerHTML = 'None';
+    }
+}
+
+function toggleScope(pScope) {
+    var lToggle = document.getElementById(`toggle_${pScope}`);
+    lToggle.checked = !lToggle.checked;
+    lToggle.dispatchEvent(new Event('change'));
+
+    setSelectedScopesDisplay();
 }
 
 function saveToClipboard() {
@@ -196,7 +215,7 @@ function saveToClipboard() {
 }
 
 function clearScopes() {
-    var lCheckboxes = document.querySelectorAll("input[type='checkbox']");
+    var lCheckboxes = document.querySelectorAll(".scopeToggle");
     lCheckboxes.forEach(function (checkbox) {
         checkbox.checked = false;
         checkbox.dispatchEvent(new Event('change'));

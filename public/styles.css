@@ -201,3 +201,7 @@ a:visited {
 #saveToClipboard {
     cursor: copy;
 }
+
+.removeScopeSup {
+    border: 1px dotted;
+}
