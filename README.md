@@ -55,7 +55,7 @@ This project is a web application designed to easily get Twitch user access toke
     # The port to run the server on will default to 3000
     PORT=
 
-    #Certificate files used for HTTPS
+    #Certificate files used for HTTPS, if empty will use HTTP localhost instead
     CERT_KEY=
     CERT_FILE=
 
