@@ -7,7 +7,7 @@ const path = require('path');
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ? process.env.PORT : 3000;
 
 // Twitch credentials
 const gClientId = process.env.TWITCH_CLIENT_ID;
@@ -20,7 +20,7 @@ if (!gClientSecret) {
     throw new Error('TWITCH_CLIENT_SECRET is not defined in the environment variables.');
 }
 
-var gHost = process.env.HOST ?? "localhost";
+var gHost = isValidHost(process.env.HOST) ? isValidHost(process.env.HOST) : "localhost";
 
 //Preset scopes for the bot user access token
 const gScopesBot = process.env.TWITCH_SCOPES_BOT;
@@ -121,3 +121,18 @@ app.get('/Twitch/callback', async (req, res) => {
 });
 
 
+function isValidHost(pHost) {
+    try {
+        // If the user provided just a hostname (no scheme), prepend "http://"
+        const lFormattedHost = pHost.includes("://") ? pHost : `http://${pHost}`;
+
+        // Try creating a new URL object
+        const lUrl = new URL(lFormattedHost);
+
+        // Check if the hostname is valid
+        return Boolean(lUrl.hostname);
+    } catch (error) {
+        console.error('Invalid host:', error.message);
+        return false;
+    }
+}
