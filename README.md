@@ -33,8 +33,9 @@ This project is a web application designed to easily get Twitch user access toke
     ```bash
     npm install
     ```
+    This will start a [install script](setup.js) and prompt you to enter the Twitch ClientID and Client Secret. The entered values will be set in the `.env` file.
+3. **Configure the `.env` File**:
 
-3. **Create a `.env` File**:
     Add your Twitch credentials and server configuration in a `.env` file:
     ```
     TWITCH_CLIENT_ID=your_client_id
