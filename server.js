@@ -47,12 +47,14 @@ try {
     // as twitch redirects only to https or localhost
     console.log('SSL certificate files not found, starting HTTP server instead.');
 
+    gProtocol = 'http';
+    gHost = 'localhost';
+
     http.createServer(app).listen(PORT, () => {
         console.log(`Server is running on http://${gHost}:${PORT}`);
     });
 
-    gProtocol = 'http';
-    gHost = 'localhost';
+
 }
 
 var gRedirectUri = `${gProtocol}://${gHost}:${PORT}/Twitch/callback`;
