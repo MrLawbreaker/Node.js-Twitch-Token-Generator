@@ -114,12 +114,26 @@ app.get('/Twitch/callback', async (req, res) => {
         });
 
         const data = await response.json();
+
+        //Call the callback URL if provided
+        if (process.env.CALLBACK_URL) {
+            await fetch(process.env.CALLBACK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            res.send('Success! You can close this window now!');
+        }
+        else {
         res.json(data);
+        }
+
+
     } catch (error) {
-        res.send('Error exchanging token: ' + error.message);
+        console.error('Error exchanging token:', error.message);
+        res.status(500).send('Error exchanging token');
     }
 });
-
 
 function isValidHost(pHost) {
     try {

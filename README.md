@@ -36,14 +36,31 @@ This project is a web application designed to easily get Twitch user access toke
     This will start a [install script](setup.js) and prompt you to enter the Twitch ClientID and Client Secret. The entered values will be set in the `.env` file.
 3. **Configure the `.env` File**:
 
-    Add your Twitch credentials and server configuration in a `.env` file:
-    ```
-    TWITCH_CLIENT_ID=your_client_id
-    TWITCH_CLIENT_SECRET=your_client_secret
-    HOST=your_host_url # Defaults to "localhost" if not provided
-    PORT=your_port # Defaults to 3000 if not provided
-    CERT_KEY=path_to_ssl_key
-    CERT_FILE=path_to_ssl_certificate
+    Add your Twitch credentials and server configuration in a `.env` file next to [server.js](server.js) (see [example.env](example.env)):
+    ``` yaml
+    # Required twitch info
+    TWITCH_CLIENT_ID=
+    TWITCH_CLIENT_SECRET=
+
+    # The Host for the web server
+    # defaults to localhost
+    HOST=
+    # The port to run the server on will default to 3000
+    PORT=
+
+    #Certificate files used for HTTPS
+    CERT_KEY=
+    CERT_FILE=
+
+    # Space delimted list of preset scopes
+    # https://dev.twitch.tv/docs/authentication/scopes/
+    TWITCH_SCOPES_BOT=
+    TWITCH_SCOPES_USER=
+
+    # Callback URL for the AuthToken
+    # this will be called with POST and the body is the access token
+    # as described in https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow
+    CALLBACK=
     ```
 
 4. **Run the Application**:
