@@ -27,7 +27,7 @@ This project is a web application designed to handle Twitch authentication. It a
     ```
     TWITCH_CLIENT_ID=your_client_id
     TWITCH_CLIENT_SECRET=your_client_secret
-    HOSTURL=your_host_url # Defaults to "localhost" if not provided
+    HOST=your_host_url # Defaults to "localhost" if not provided
     PORT=your_port # Defaults to 3000 if not provided
     CERT_KEY=path_to_ssl_key
     CERT_FILE=path_to_ssl_certificate
@@ -40,7 +40,11 @@ This project is a web application designed to handle Twitch authentication. It a
     ```
 
 5. **Access the Application**:
-    Open your browser and navigate to your configured URL (e.g., `https://your_host_url:your_port`).
+    Open your browser and navigate to your configured URL 
+
+    ```https://your_host_url:your_port```
+
+    The application will also tell you 
 
 6. **Enable HTTPS (Optional)**:
     For secure communication, configure HTTPS by providing valid SSL certificates in the `.env` file. 
