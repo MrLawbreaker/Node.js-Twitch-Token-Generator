@@ -1,15 +1,27 @@
 # TwitchAuthPage
 
-This project is a web application designed to handle Twitch authentication. It allows users to log in with their Twitch account and provides a foundation for integrating Twitch API features. The application supports both HTTP and HTTPS, with HTTPS recommended for production environments.
+This project is a web application designed to easily get Twitch user access tokens. It allows users to log in with their Twitch account and provides a foundation for integrating Twitch API features. The application supports both HTTP and HTTPS, with HTTPS recommended for production environments.
 
 ## Features
-- Twitch OAuth integration.
-- Predefined scopes for bot and user access tokens.
+- Implementation of Authorization code grant flow
+- Allows for predefined scopes for bot and user access tokens.
 - Customizable scopes for specific Twitch API needs.
-- HTTPS support for secure communication.
+- HTTPS support for secure communication. (HTTP for localhost as fallback)
+
+## Obtaining a Twitch Client ID and Secret
+
+1. Go to the [Twitch Developer Console](https://dev.twitch.tv/console).
+2. Log in with your Twitch account.
+3. Click on "Applications" in the top navigation bar.
+4. Click the "Register Your Application" button.
+5. Fill out the form:
+   - **Name**: Enter a name for your application.
+   - **OAuth Redirect URLs**: Add the URL where users will be redirected after authentication (e.g., `https://your_host_url:your_port/Twitch/callback`).
+   - **Category**: Select the appropriate category for your application.
+6. Click "Create" to register your application.
+7. Copy the **Client ID** and **Client Secret** from the application details page.
 
 ## Setup Instructions
-
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/MrLawbreaker/Node.js-Twitch-Token-Generator.git
@@ -48,12 +60,6 @@ This project is a web application designed to handle Twitch authentication. It a
 
 6. **Enable HTTPS (Optional)**:
     For secure communication, configure HTTPS by providing valid SSL certificates in the `.env` file. 
-
-## How It Works
-- The application uses Twitch's OAuth flow to authenticate users.
-- It provides predefined scopes for bot and user access tokens.
-- Users can also specify custom scopes for their authentication needs.
-- The server supports both HTTP and HTTPS, with automatic fallback to HTTP if SSL certificates are not provided.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
