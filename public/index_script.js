@@ -1,3 +1,4 @@
+//#region Scopes
 const gScopes = {
     "analytics:read:extensions": "View analytics data for the Twitch Extensions owned by the authenticated account.<br><br><strong>API</strong><br><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://dev.twitch.tv/docs/api/reference#get-extension-analytics\">Get Extension Analytics</a>",
     "analytics:read:games": "View analytics data for the games owned by the authenticated account.<br><br><strong>API</strong><br><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://dev.twitch.tv/docs/api/reference#get-game-analytics\">Get Game Analytics</a>",
@@ -78,6 +79,7 @@ const gScopes = {
     "chat:read": "View chat messages sent in a chatroom using an IRC connection.",
     "whispers:read": "Receive whisper messages for your user using PubSub."
 }
+//#endregion Scopes
 
 function generateTable(pData) {
     // Create the table
@@ -206,6 +208,7 @@ function clearScopes() {
 generateTable(gScopes);
 
 
+//#region Availibility Check
 // Fetch scope availability and hide buttons if necessary
 fetch('/scope-availability')
     .then(response => response.json())
@@ -216,10 +219,15 @@ fetch('/scope-availability')
         if (!data.userScopesAvailable) {
             document.querySelector('#linkUserDiv').style.display = 'none';
         }
+        if (!data.customScopesAvailable) {
+            document.querySelector('#linkCustomDiv').style.display = 'none';
+        }
     })
     .catch(error => console.error('Error fetching scope availability:', error));
 
+//#endregion Availibility Check
 
+//#region Scroll to Top
 /**********************************************************************
  * To Top function
  * https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
@@ -243,3 +251,4 @@ function topFunction() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
+//#endregion Scroll to Top

@@ -7,6 +7,8 @@ const path = require('path');
 const { randomUUID } = require('crypto');
 
 dotenv.config();
+
+//#region Server setup
 const app = express();
 const PORT = process.env.PORT ? process.env.PORT : 3000;
 
@@ -24,10 +26,14 @@ if (!gClientSecret) {
 var gHost = isValidHost(process.env.HOST) ? isValidHost(process.env.HOST) : "localhost";
 
 //Preset scopes for the bot user access token
-const gScopesBot = process.env.TWITCH_SCOPES_BOT;
+const gScopesBot = process.env.ALLOW_BOT_SCOPES === 'true'
+    ? process.env.TWITCH_SCOPES_BOT
+    : undefined;
 
 //Preset scopes for the Channel user access token
-const gScopesUser = process.env.TWITCH_SCOPES_USER;
+const gScopesUser = process.env.ALLOW_USER_SCOPES === 'true'
+    ? process.env.TWITCH_SCOPES_USER
+    : undefined;
 
 var gProtocol;
 
@@ -53,42 +59,56 @@ try {
     http.createServer(app).listen(PORT, () => {
         console.log(`Server is running on http://${gHost}:${PORT}`);
     });
-
-
 }
 
 const gRedirectUri = `${gProtocol}://${gHost}:${PORT}/Twitch/callback`;
+//#endregion Server setup
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
-app.get('/TwitchBot', (req, res) => {
-    const lAuthUrl = getAuthURL(gScopesBot);
-    res.redirect(lAuthUrl);
-});
-
-app.get('/TwitchUser', (req, res) => {
-
-    const lAuthUrl = getAuthURL(gScopesUser);
-    res.redirect(lAuthUrl);
-});
-
-app.get('/TwitchCustom', (req, res) => {
-    const lCustomScopes = req.query.scopes;
-    const lAuthURL = getAuthURL(lCustomScopes);
-
-    res.redirect(lAuthURL);
-});
-
-app.get('/TwitchValidate', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/twitch-validate.html'));
+//#region Endpoints
+app.get('/', (req, res) => {
+    return res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 app.get('/scope-availability', (req, res) => {
-    res.json({
+    return res.json({
         botScopesAvailable: !!gScopesBot,
-        userScopesAvailable: !!gScopesUser
+        userScopesAvailable: !!gScopesUser,
+        customScopesAvailable: process.env.ALLOW_CUSTOM_SCOPES === 'true',
     });
+});
+
+if (process.env.ALLOW_CUSTOM_SCOPES === 'true') {
+    app.get('/TwitchCustom', (req, res) => {
+        const lCustomScopes = req.query.scopes;
+
+        if (!lCustomScopes || typeof lCustomScopes !== 'string' || !lCustomScopes.trim()) {
+            return res.status(400).send('Invalid or missing scopes.');
+        }
+        const lAuthURL = getAuthURL(lCustomScopes);
+
+        return res.redirect(lAuthURL);
+    });
+}
+
+if (process.env.ALLOW_BOT_SCOPES === 'true') {
+    app.get('/TwitchBot', (req, res) => {
+        const lAuthUrl = getAuthURL(gScopesBot);
+        return res.redirect(lAuthUrl);
+    });
+}
+
+if (process.env.ALLOW_USER_SCOPES === 'true') {
+    app.get('/TwitchUser', (req, res) => {
+        const lAuthUrl = getAuthURL(gScopesUser);
+        return res.redirect(lAuthUrl);
+    });
+}
+
+app.get('/TwitchValidate', (req, res) => {
+    return res.sendFile(path.join(__dirname, '/public/twitch-validate.html'));
 });
 
 app.get('/Twitch/callback', async (req, res) => {
@@ -103,7 +123,7 @@ app.get('/Twitch/callback', async (req, res) => {
     }
 
     const lState = req.query.state;
-    if (!lState || !gStateSet.has(lState)) {
+    if (!lState?.trim() || !gStateSet.has(lState)) {
         return res.sendStatus(401);
     }
 
@@ -139,10 +159,10 @@ app.get('/Twitch/callback', async (req, res) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            res.send('Success! You can close this window now!');
+            return res.send('Success! You can close this window now!');
         }
         else {
-            res.json(data);
+            return res.json(data);
         }
 
 
@@ -151,8 +171,9 @@ app.get('/Twitch/callback', async (req, res) => {
         res.status(500).send('Error exchanging token');
     }
 });
+//#endregion Endpoints
 
-
+//#region Helpers
 const gStateSet = new Set();
 
 function getAuthURL(pScopesString) {
@@ -190,3 +211,4 @@ function isValidHost(pHost) {
         return false;
     }
 }
+//#endregion Helpers

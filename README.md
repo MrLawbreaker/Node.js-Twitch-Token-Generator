@@ -3,11 +3,14 @@
 This project is a web application designed to easily get Twitch user access tokens. It allows users to log in with their Twitch account and provides a foundation for integrating Twitch API features. The application supports both HTTP and HTTPS, with HTTPS recommended for production environments.
 
 ## Features
+
 - Implementation of Authorization code grant flow
-- Allows for predefined scopes for bot and user access tokens.
-- Customizable scopes for specific Twitch API needs.
+- Selection of custom scopes for easy copy paste or immediate authentication with selected scopes
+- Predefined scopes for bot and user access tokens.
+- Allows for partly disabling of pages so one could only serve the preset Bot/User scopes
 - HTTPS support for secure communication. (HTTP for localhost as fallback)
-- Uses generated [state parameter](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow) to ensure only codes from this application turned into tokens
+- Uses generated [state parameter](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow) to ensure only codes from this application are turned into tokens
+
 
 ## Obtaining a Twitch Client ID and Secret
 
@@ -61,7 +64,20 @@ This project is a web application designed to easily get Twitch user access toke
     # Callback URL for the AuthToken
     # this will be called with POST and the body is the access token
     # as described in https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow
+    # This allows you to use the token in your own application
+    # If this is not set the data will be shown to the calling user
+    # If set the user will only see a success or fail message
     CALLBACK=
+
+    # If set to anything other than "true"
+    # the index page will not be shown
+    ALLOW_CUSTOM_SCOPES=true
+    # If set to anything other than "true"
+    # the scope page /TwitchBot will not be shown
+    ALLOW_BOT_SCOPES=true
+    # If set to anything other than "true"
+    # the scope page /TwitchUser will not be shown
+    ALLOW_USER_SCOPES=true
     ```
 
 4. **Run the Application**:
@@ -73,7 +89,9 @@ This project is a web application designed to easily get Twitch user access toke
 5. **Access the Application**:
     Open your browser and navigate to your configured URL 
 
-    ```https://your_host_url:your_port```
+    ``` 
+    https://your_host_url:your_port
+    ```
 
     The application will also tell you the URL where it is running based on your configuration.
 
@@ -84,21 +102,24 @@ This project is a web application designed to easily get Twitch user access toke
 
 The application provides the following endpoints:
 
-- **`/TwitchBot`**  
-    Redirects the user to Twitch's authorization page for obtaining a bot access token using predefined bot scopes.
+ **`/TwitchBot`**  
+Redirects the user to Twitch's authorization page for obtaining a bot access token using predefined bot scopes.  
+Can be called manually if env var `ALLOW_BOT_SCOPES` is set to `true`
 
-- **`/TwitchUser`**  
-    Redirects the user to Twitch's authorization page for obtaining a user access token using predefined user scopes.
+ **`/TwitchUser`**  
+Redirects the user to Twitch's authorization page for obtaining a user access token using predefined user scopes.  
+Can be called manually if env var `ALLOW_USER_SCOPES` is set to `true`
 
-- **`/TwitchCustom`**  
-    Redirects the user to Twitch's authorization page for obtaining an access token with custom scopes.  
-    - Query Parameter: `scopes` (space-delimited list of scopes).
+ **`/TwitchCustom`**  
+Redirects the user to Twitch's authorization page for obtaining an access token with custom scopes.  
+Can be called manually if env var `ALLOW_CUSTOM_SCOPES` is set to `true`
+- Query Parameter: `scopes` (space-delimited list of scopes).
 
-- **`/TwitchValidate`**  
-    Serves a validation page where users can input and validate their Twitch tokens.
+ **`/TwitchValidate`**  
+Serves a validation page where users can input and validate their Twitch tokens.
 
-- **`/Twitch/callback`**  
-    Handles the callback from Twitch after user authorization. Exchanges the authorization code for an access token and returns the token details as JSON.
+ **`/Twitch/callback`**  
+Handles the callback from Twitch after user authorization. Exchanges the authorization code for an access token and returns the token details as JSON or sends them to the configured callback adress.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
