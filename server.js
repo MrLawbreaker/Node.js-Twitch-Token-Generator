@@ -130,7 +130,7 @@ function isValidHost(pHost) {
         const lUrl = new URL(lFormattedHost);
 
         // Check if the hostname is valid
-        return Boolean(lUrl.hostname);
+        return lUrl.hostname;
     } catch (error) {
         console.error('Invalid host:', error.message);
         return false;
