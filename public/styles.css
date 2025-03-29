@@ -184,3 +184,7 @@ a:visited {
     background-color: #555;
     /* Add a dark-grey background on hover */
 }
+
+#token {
+    text-align: center;
+}

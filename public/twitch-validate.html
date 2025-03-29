@@ -11,14 +11,12 @@
 
 <body>
     <h2>Validate Twitch Token</h2>
-    <div class="buttonLinkContainer">
-        <div>
-            <span>Auth token</span>
-            <input type="text" id="token" name="token">
-        </div>
-        <div class="buttonLink">
-            <a href="#" onclick="document.getElementById('validateForm').submit()">Submit</a>
-        </div>
+    <span>Auth token</span>
+    <div>
+        <input type="text" id="token" name="token" size="50">
+    </div>
+    <div class="buttonLink">
+        <a href="#" onclick="getTokenValidation()">Submit</a>
     </div>
     <div>
         <pre id="response"></pre>
