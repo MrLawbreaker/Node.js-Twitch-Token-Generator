@@ -155,11 +155,6 @@ app.get('/Twitch/callback', async (req, res) => {
 
 const gStateSet = new Set();
 
-/**
- * 
- * @param {string} pScopesString Space delimited 
- * @returns 
- */
 function getAuthURL(pScopesString) {
     const lNow = Date.now();
     const lState = `${lNow}${randomUUID()}`;
@@ -167,7 +162,7 @@ function getAuthURL(pScopesString) {
     gStateSet.add(lState);
     setTimeout(() => {
         gStateSet.delete(lState);
-    }, 10 * 1000); //Make state invalid in 10 seconds
+    }, 5 * 60 * 1000); //Make state invalid automatically
 
     const lAuthUrl = new URL('https://id.twitch.tv/oauth2/authorize');
     lAuthUrl.searchParams.append('client_id', gClientId);
