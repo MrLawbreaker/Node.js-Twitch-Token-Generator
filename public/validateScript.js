@@ -2,8 +2,10 @@ async function getTokenValidation() {
 
     const token = document.getElementById("token").value;
     const responseElement = document.getElementById("response");
-
+    responseElement.style.display = 'block';
     try {
+        responseElement.textContent = "Loading...";
+
         const response = await fetch('https://id.twitch.tv/oauth2/validate', {
             method: 'GET',
             headers: { 'Authorization': 'OAuth ' + token }
