@@ -5,10 +5,19 @@ const http = require('http'); // For HTTP server
 const fs = require('fs');
 const path = require('path');
 const { randomUUID } = require('crypto');
+const { rateLimit } = require('express-rate-limit')
+
 
 dotenv.config();
 
 //#region Server setup
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000,
+    limit: 10, // Limit each IP to X requests per `window`
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+
+})
 const app = express();
 const PORT = process.env.PORT ? process.env.PORT : 3000;
 
@@ -111,7 +120,7 @@ app.get('/TwitchValidate', (req, res) => {
     return res.sendFile(path.join(__dirname, '/public/twitch-validate.html'));
 });
 
-app.get('/Twitch/callback', async (req, res) => {
+app.get('/Twitch/callback', limiter, async (req, res) => {
 
     /**
      * Authorization checks

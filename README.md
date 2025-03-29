@@ -122,7 +122,7 @@ Can be called if env var `ALLOW_CUSTOM_SCOPES` is set to `true`
 Serves a validation page where one can input and validate Twitch tokens.
 
  **`/Twitch/callback`**  
-Handles the callback from Twitch after user authorization. Exchanges the authorization code for an access token and returns the token details as JSON or sends them to the configured callback adress.
+Handles the callback from Twitch after user authorization. Exchanges the authorization code for an access token and returns the token details as JSON or sends them to the configured callback adress. Rate limited to 10 Requests per minute per IP.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
