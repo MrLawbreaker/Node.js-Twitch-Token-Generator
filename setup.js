@@ -15,21 +15,41 @@ if (!fs.existsSync(envFilePath)) {
     }
 }
 
+// Read the existing .env file
+const envContent = fs.readFileSync(envFilePath, 'utf8');
+const envLines = envContent.split('\n');
+
+// Check if the credentials are already set
+const hasClientId = envLines.some(line => line.startsWith('TWITCH_CLIENT_ID='));
+const hasClientSecret = envLines.some(line => line.startsWith('TWITCH_CLIENT_SECRET='));
+
+if (hasClientId && hasClientSecret) {
+    console.log('TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are already set. Exiting.');
+    return;
+}
+
 // Define the schema for the prompt
 const schema = {
     properties: {
-        TWITCH_CLIENT_ID: {
-            description: 'Enter your Twitch Client ID',
-            required: true
-        },
-        TWITCH_CLIENT_SECRET: {
-            description: 'Enter your Twitch Client Secret',
-            required: true,
-            hidden: true,
-            replace: '*'
-        }
+
     }
 };
+
+if (!hasClientId) {
+    schema.properties.TWITCH_CLIENT_ID = {
+        description: 'Enter your Twitch Client ID',
+        required: true
+    };
+}
+
+if (!hasClientSecret) {
+    schema.properties.TWITCH_CLIENT_SECRET = {
+        description: 'Enter your Twitch Client Secret',
+        required: true,
+        hidden: true,
+        replace: '*'
+    };
+}
 
 // Start the prompt
 prompt.start();
