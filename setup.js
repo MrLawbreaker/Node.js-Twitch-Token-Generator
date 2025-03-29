@@ -1,5 +1,8 @@
 const fs = require('fs');
 const prompt = require('prompt');
+const dotenv = require('dotenv')
+
+
 
 const envFilePath = '.env';
 const exampleEnvFilePath = 'example.env';
@@ -15,13 +18,11 @@ if (!fs.existsSync(envFilePath)) {
     }
 }
 
-// Read the existing .env file
-const envContent = fs.readFileSync(envFilePath, 'utf8');
-const envLines = envContent.split('\n');
+dotenv.config();
 
 // Check if the credentials are already set
-const hasClientId = envLines.some(line => line.startsWith('TWITCH_CLIENT_ID='));
-const hasClientSecret = envLines.some(line => line.startsWith('TWITCH_CLIENT_SECRET='));
+const hasClientId = Boolean(process.env.TWITCH_CLIENT_ID);
+const hasClientSecret = Boolean(process.env.TWITCH_CLIENT_SECRET);
 
 if (hasClientId && hasClientSecret) {
     console.log('TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are already set. Exiting.');
@@ -62,16 +63,22 @@ prompt.get(schema, (err, result) => {
     }
 
     // Read the existing .env file
-    let envContent = fs.readFileSync(envFilePath, 'utf8');
+    let lEnvContent = fs.readFileSync(envFilePath, 'utf8');
 
     // Update or add the variables in the .env file
-    const updatedEnvContent = envContent
+    const updatedEnvContent = lEnvContent
         .split('\n')
-        .filter(line => !line.startsWith('TWITCH_CLIENT_ID=') && !line.startsWith('TWITCH_CLIENT_SECRET='))
-        .concat([
-            `TWITCH_CLIENT_ID=${result.TWITCH_CLIENT_ID}`,
-            `TWITCH_CLIENT_SECRET=${result.TWITCH_CLIENT_SECRET}`
-        ])
+        .map(lLine => {
+            if (lLine.startsWith('TWITCH_CLIENT_ID=')) {
+                return `TWITCH_CLIENT_ID=${hasClientId ? process.env.TWITCH_CLIENT_ID : result.TWITCH_CLIENT_ID}`;
+            }
+
+            if (lLine.startsWith('TWITCH_CLIENT_SECRET=')) {
+                return `TWITCH_CLIENT_SECRET=${hasClientSecret ? process.env.TWITCH_CLIENT_SECRET : result.TWITCH_CLIENT_SECRET}`;
+            }
+
+            return lLine;
+        })
         .join('\n');
 
     // Write the updated content back to the .env file
