@@ -7,6 +7,7 @@ This project is a web application designed to easily get Twitch user access toke
 - Allows for predefined scopes for bot and user access tokens.
 - Customizable scopes for specific Twitch API needs.
 - HTTPS support for secure communication. (HTTP for localhost as fallback)
+- Uses generated [state parameter](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow) to ensure only codes from this application turned into tokens
 
 ## Obtaining a Twitch Client ID and Secret
 
