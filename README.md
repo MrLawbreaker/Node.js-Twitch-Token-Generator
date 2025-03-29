@@ -107,19 +107,19 @@ The application provides the following endpoints:
 
  **`/TwitchBot`**  
 Redirects the user to Twitch's authorization page for obtaining a bot access token using predefined bot scopes.  
-Can be called manually if env var `ALLOW_BOT_SCOPES` is set to `true`
+Can be called if env var `ALLOW_BOT_SCOPES` is set to `true`
 
  **`/TwitchUser`**  
 Redirects the user to Twitch's authorization page for obtaining a user access token using predefined user scopes.  
-Can be called manually if env var `ALLOW_USER_SCOPES` is set to `true`
+Can be called if env var `ALLOW_USER_SCOPES` is set to `true`
 
  **`/TwitchCustom`**  
 Redirects the user to Twitch's authorization page for obtaining an access token with custom scopes.  
-Can be called manually if env var `ALLOW_CUSTOM_SCOPES` is set to `true`
+Can be called if env var `ALLOW_CUSTOM_SCOPES` is set to `true`
 - Query Parameter: `scopes` (space-delimited list of scopes).
 
  **`/TwitchValidate`**  
-Serves a validation page where users can input and validate their Twitch tokens.
+Serves a validation page where one can input and validate Twitch tokens.
 
  **`/Twitch/callback`**  
 Handles the callback from Twitch after user authorization. Exchanges the authorization code for an access token and returns the token details as JSON or sends them to the configured callback adress.
