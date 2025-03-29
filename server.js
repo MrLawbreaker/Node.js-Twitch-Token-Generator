@@ -7,12 +7,12 @@ const path = require('path');
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT ?? 3000;
 
 // Twitch credentials
 const gClientId = process.env.TWITCH_CLIENT_ID;
 const gClientSecret = process.env.TWITCH_CLIENT_SECRET;
-var gHost = process.env.HOSTURL;
+var gHost = process.env.HOSTURL ?? "localhost";
 
 //Preset scopes for the bot user access token
 const gScopesBot = ['chat:edit', 'chat:read', 'user:write:chat', 'moderator:manage:announcements',
