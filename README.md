@@ -2,6 +2,9 @@
 
 This project is a web application designed to easily get Twitch user access tokens. It allows users to log in with their Twitch account and provides a foundation for integrating Twitch API features. The application supports both HTTP and HTTPS, with HTTPS recommended for production environments.
 
+![grafik](https://github.com/user-attachments/assets/f5baab69-8ffe-4d1d-8d1c-e77e516cb7be)
+
+
 ## Features
 
 - Implementation of Authorization code grant flow
