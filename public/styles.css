@@ -39,7 +39,9 @@ td {
     padding: 0.5em;
 }
 
-tr {}
+tr {
+    transition: .5s;
+}
 
 table,
 th,
@@ -49,8 +51,9 @@ td {
     border-radius: 4px;
 }
 
-.selectedScope {
+tr.selectedScope {
     background-color: #90ee9036;
+    transition: .5s;
 }
 
 /* The switch - the box around the slider */
@@ -77,8 +80,8 @@ td {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: .5s;
+    transition: .5s;
 }
 
 .slider:before {
