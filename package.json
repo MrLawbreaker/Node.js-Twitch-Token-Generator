@@ -1,12 +1,12 @@
 {
-  "name": "Nodejs Twitch Auth Token Generator",
+  "name": "node-twitch-auth-token-generator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "MrLawbreaker",
   "license": "MIT",
   "description": "",
   "dependencies": {
