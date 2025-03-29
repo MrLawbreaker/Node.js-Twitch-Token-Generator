@@ -188,3 +188,16 @@ a:visited {
 #token {
     text-align: center;
 }
+
+.interactableLink {
+    text-decoration: underline dotted;
+    cursor: default;
+}
+
+.interactableLink:hover {
+    color: cyan;
+}
+
+#saveToClipboard {
+    cursor: copy;
+}

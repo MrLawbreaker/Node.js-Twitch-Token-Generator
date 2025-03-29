@@ -88,7 +88,7 @@ function generateTable(pData) {
     let lThead = document.createElement("thead");
     let lHeaderRow = document.createElement("tr");
     let lHeaderToggle = document.createElement("td");
-    lHeaderToggle.innerHTML = "<strong>Use scope</strong>";
+    lHeaderToggle.innerHTML = "<strong>Use scope (<span class='interactableLink' id='clearScopeSpan' onclick='clearScopes()'>Clear</span>)</strong>";
     let lHeaderScope = document.createElement("td");
     lHeaderScope.innerHTML = "<strong>Scope</strong>";
     let lHeaderDesc = document.createElement("td");
@@ -181,6 +181,26 @@ function setSelectedScopesDisplay() {
 
     var lSelectedScopesElem = document.getElementById("selectedScopes");
     lSelectedScopesElem.innerHTML = "[ " + lScopeArray.map(x => `<a href="#${x}">${x}</a>`).join(" | ") + " ]";
+}
+
+function saveToClipboard() {
+    var lScopes = [...gSelectedScopes].join(' ');
+
+    navigator.clipboard.writeText(lScopes).then(function () {
+        alert("Copied scopes to clipboard:\n" + lScopes);
+    }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+    });
+}
+
+function clearScopes() {
+    var lCheckboxes = document.querySelectorAll("input[type='checkbox']");
+    lCheckboxes.forEach(function (checkbox) {
+        checkbox.checked = false;
+        checkbox.dispatchEvent(new Event('change'));
+    });
+
+    setSelectedScopesDisplay();
 }
 
 generateTable(gScopes);
