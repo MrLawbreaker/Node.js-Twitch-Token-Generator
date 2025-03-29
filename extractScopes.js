@@ -8,7 +8,7 @@ function getScopes() {
 
     lTables.forEach((pElem) => {
         var lData = [...pElem.getElementsByTagName("td")];
-        lObject[lData[0].innerText] = lData[1].innerHTML.replaceAll('href="/', 'href="https://dev.twitch.tv/');
+        lObject[lData[0].innerText] = lData[1].innerHTML.replaceAll('href="/', 'target="_blank" rel="noopener noreferrer" href="https://dev.twitch.tv/');
     });
 
     console.log((lObject));
