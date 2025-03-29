@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "MrLawbreaker",
   "license": "MIT",
-  "description": "",
+  "description": "A web application for obtaining Twitch user access tokens.",
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -17,5 +17,8 @@
     "https": "^1.0.0",
     "path": "^0.12.7",
     "prompt": "^1.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
