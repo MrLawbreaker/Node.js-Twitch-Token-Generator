@@ -191,10 +191,10 @@ fetch('/scope-availability')
     .then(response => response.json())
     .then(data => {
         if (!data.botScopesAvailable) {
-            document.querySelector('.buttonLink a[href="/TwitchBot"]').style.display = 'none';
+            document.querySelector('#linkBotDiv').style.display = 'none';
         }
         if (!data.userScopesAvailable) {
-            document.querySelector('.buttonLink a[href="/TwitchUser"]').style.display = 'none';
+            document.querySelector('#linkUserDiv').style.display = 'none';
         }
     })
     .catch(error => console.error('Error fetching scope availability:', error));
