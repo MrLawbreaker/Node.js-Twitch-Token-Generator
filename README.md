@@ -73,7 +73,7 @@ This project is a web application designed to easily get Twitch user access toke
     CALLBACK=
 
     # If set to anything other than "true"
-    # the index page will not be shown
+    # the index page will not show link to authenticate selected scopes
     ALLOW_CUSTOM_SCOPES=true
     # If set to anything other than "true"
     # the scope page /TwitchBot will not be shown
