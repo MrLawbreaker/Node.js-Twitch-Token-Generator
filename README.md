@@ -9,7 +9,7 @@ This project is a web application designed to easily get Twitch user access toke
 
 - Implementation of Authorization code grant flow
 - Selection of custom scopes for easy copy paste or immediate authentication with selected scopes
-- Predefined scopes for bot and user access tokens.
+- Allows for predefined scopes for bot and user access tokens. (Server side predefined scopes)
 - Allows for partly disabling of pages so one could only serve the preset Bot/User scopes
 - HTTPS support for secure communication. (HTTP for localhost as fallback)
 - Uses generated [state parameter](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow) to ensure only codes from this application are turned into tokens
